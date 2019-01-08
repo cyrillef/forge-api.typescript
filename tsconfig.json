@@ -1,0 +1,40 @@
+{
+	"compilerOptions": {
+		"lib": [
+			"es2017", "es7", "es6", "dom"
+		],
+		/* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */
+		"target": "es6",
+		"module": "commonjs",
+		/* Enable all strict type-checking options. */
+		"strict": true,
+		/* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+		"moduleResolution": "node",
+
+		"declaration": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"outDir": "./dist",
+		"sourceMap": true,
+
+
+		"baseUrl": ".",
+		"paths": {
+			"*": ["src/types/*"]
+		}
+	},
+	"include": [
+		"typings/tslint/node",
+		"typings/tslint/node/node.d.ts"
+	],
+	"exclude": [
+		"typings/globals/node",
+		"typings/globals/node/index.d.ts",
+		"node_modules",
+		"dist"
+	]
+}
