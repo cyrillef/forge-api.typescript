@@ -30,6 +30,7 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
+		"@types/three": "^0.93.15",
 		"typescript": "^3.2.1",
 		"typings": "^2.1.1"
 	},
