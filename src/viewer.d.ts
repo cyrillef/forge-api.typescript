@@ -296,10 +296,10 @@ declare module Autodesk {
                 finish(): any;
                 setUsePivotAlways(value: boolean):any;
 
-                setGroundShadow (param: boolean) ;
-		        setGroundReflection (param: boolean) ;
-		        setOptimizeNavigation (param: boolean) ;
-                setQualityLevel (useSAO: boolean, useFXAA: boolean) ;
+                setGroundShadow (param: boolean):void ;
+		            setGroundReflection (param: boolean):void ;
+		            setOptimizeNavigation (param: boolean):void ;
+                setQualityLevel (useSAO: boolean, useFXAA: boolean):void ;
 
                 loadExtension(extensionId: string, options?: Object): boolean;
                 unloadExtension(extensionId: string): boolean;

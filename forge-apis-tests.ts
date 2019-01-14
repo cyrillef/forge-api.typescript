@@ -1,8 +1,8 @@
 import {AuthClientTwoLegged, AuthClientThreeLegged, BucketsApi, HubsApi, FoldersApi, DerivativesApi} from 'forge-apis'
 
-var authClientTwoLegged: AuthClientTwoLegged = new AuthClientTwoLegged();
+var authClientTwoLegged: AuthClientTwoLegged = new AuthClientTwoLegged("","",[]);
 
-var authClientThreeLegged: AuthClientThreeLegged = new AuthClientThreeLegged();
+var authClientThreeLegged: AuthClientThreeLegged = new AuthClientThreeLegged("","","",[]);
 
 var bucketsApi: BucketsApi = new BucketsApi();
 

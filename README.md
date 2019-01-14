@@ -3,9 +3,9 @@
 
 # Usage
 
-The type definitions here should be installed as part of the [forge-apis](https://www.npmjs.com/package/forge-apis) package. And you won't need to explicitly reference the definitions if you use TypeScript >= 2.0 - the transpiler will look for the definitions when you import the dependencies as ES6 modules.
+After installing the definitions, there's no need to explicitly reference them if you use TypeScript >= 2.0 and ES6 modules - the transpiler will look for the definitions (so long as the typeRoots contains node_modules/@types) when you import the dependencies as ES6 modules.
 
-You can install the type definitions here only, in case you do not require the [forge-apis](https://www.npmjs.com/package/forge-apis) package or you just need the typings for Viewer.js. See below for steps to manually reference the definitions.
+You can install the type definitions separately without the Forge Node.js SDK, just in case you do not require the SDK client or you just need the typings for Viewer.js. See below for steps to manually reference the definitions.
 
 - Prerequisites
 
