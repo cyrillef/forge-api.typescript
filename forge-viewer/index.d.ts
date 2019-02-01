@@ -1,6 +1,6 @@
 // Type definitions for Forge Viewer 6.3
 // Project: https://forge.autodesk.com/en/docs/viewer/v6/reference/javascript/viewer3d/
-// Definitions by: Autodesk Forge Partner Development <https://github.com/Autodesk-Forge>
+// Definitions by: Autodesk Forge Partner Development <https://github.com/Autodesk-Forge>, Alan Smith <https://github.com/alansmithnbs>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.8
 
@@ -23,35 +23,6 @@
 
 declare namespace Autodesk {
     namespace Viewing {
-        // events
-        let ESCAPE_EVENT: string;
-        let PROGRESS_UPDATE_EVENT: string;
-        let FULLSCREEN_MODE_EVENT: string;
-        let NAVIGATION_MODE_CHANGED_EVENT: string;
-        let VIEWER_STATE_RESTORED_EVENT: string;
-        let VIEWER_RESIZE_EVENT: string;
-        let VIEWER_UNINITIALIZED: string;
-        let MODEL_ROOT_LOADED_EVENT: string;
-        let GEOMETRY_LOADED_EVENT: string;
-        let TOOLBAR_CREATED_EVENT: string;
-        let OBJECT_TREE_CREATED_EVENT: string;
-        let OBJECT_TREE_UNAVAILABLE_EVENT: string;
-        let MODEL_UNLOADED_EVENT: string;
-        let SELECTION_CHANGED_EVENT: string;
-        let AGGREGATE_SELECTION_CHANGED_EVENT: string;
-        let ISOLATE_EVENT: string;
-        let HIDE_EVENT: string;
-        let SHOW_EVENT: string;
-        let HIGHLIGHT_EVENT: string;
-        let CAMERA_CHANGE_EVENT: string;
-        let EXPLODE_CHANGE_EVENT: string;
-        let CUTPLANES_CHANGE_EVENT: string;
-        let TOOL_CHANGE_EVENT: string;
-        let RENDER_OPTION_CHANGED_EVENT: string;
-        let LAYER_VISIBILITY_CHANGED_EVENT: string;
-        let RESET_EVENT: string;
-        let ANIMATION_READY_EVENT: string;
-
         enum ErrorCodes {
           UNKNOWN_FAILURE = 1,
           BAD_DATA = 2,
@@ -162,14 +133,8 @@ declare namespace Autodesk {
           COMMANDMOZ = 224,
         }
 
-
-        enum SelectionMode {
-            MIXED,
-            REGULAR,
-            OVERLAYED,
-            LEAF_OBJECT,
-            FIRST_OBJECT,
-            LAST_OBJECT
+        interface ViewerEvent {
+          [key: string]: any;
         }
 
         interface Viewer3DConfig {
@@ -222,7 +187,7 @@ declare namespace Autodesk {
 
         interface LoadModelOptions {
           fileLoader?: FileLoader;
-          loadOptions?: Object;
+          loadOptions?: object;
           sharedPropertyDbPath?: string;
           ids?: string;
           [key: string]: any;
@@ -247,7 +212,7 @@ declare namespace Autodesk {
           constructor(viewer: Viewer3D);
 
           is3d(): boolean;
-          loadFile(url: string, options: FileLoaderOptions, onSuccess: Function, onError: Function): void;
+          loadFile(url: string, options: FileLoaderOptions, onSuccess: () => void, onError: () => void): void;
         }
 
         interface ViewerItem {
@@ -314,8 +279,8 @@ declare namespace Autodesk {
         const VIEWER_UNINITIALIZED = 'viewerUninitialized';
 
         interface ViewerEventArgs {
-          target?: Autodesk.Viewing.Viewer3D;
-          model?: Autodesk.Viewing.ViewerItem;
+          target?: Viewer3D;
+          model?: ViewerItem;
           type: string;
           [key: string]: any;
         }
@@ -338,10 +303,10 @@ declare namespace Autodesk {
           data: ViewerItem;
           isLeaf: boolean;
           sharedPropertyDbPath: string;
-          lodNode: Object;
+          lodNode: object;
           children: BubbleNode[];
 
-          constructor(rawNode: Object, parent?: BubbleNode);
+          constructor(rawNode: object, parent?: BubbleNode);
 
           findByGuid(guid: string): BubbleNode;
           findParentGeom2Dor3D(): BubbleNode;
@@ -349,7 +314,7 @@ declare namespace Autodesk {
           findViewableParent(): BubbleNode;
           getLodNode(): boolean;
           getNamedViews(): string[];
-          getPlacementTransform(): Object;
+          getPlacementTransform(): object;
           getRootNode(): BubbleNode;
           getTag(tag: string): any;
           getViewableRootPath(): string;
@@ -364,18 +329,16 @@ declare namespace Autodesk {
           isViewable(): boolean;
           name(): string;
           search(propsToMatch: BubbleNodeSearchProps): BubbleNode[];
-          searchByTag(tagsToMatch: Object): BubbleNode[];
+          searchByTag(tagsToMatch: object): BubbleNode[];
           setTag(tag: string, value: any): void;
-          traverse(cb: Function): boolean;
+          traverse(cb: () => void): boolean;
           urn(searchParent: boolean): string;
         }
-
 
         let theExtensionManager: ExtensionManager;
 
         interface InitializerOptions {
             env?: string;
-            language?: string;
             webGLHelpLink?: string;
             getAccessToken?(callback?: (accessToken: string, expires: number) => void): void;
             refreshToken?(callback?: (accessToken: string, expires: number) => void): void;
@@ -388,29 +351,29 @@ declare namespace Autodesk {
         function Initializer(options: InitializerOptions, callback?: () => void): void;
 
         class Document {
-            constructor(dataJSON: Object, path: string, acmsession: string);
+            constructor(dataJSON: object, path: string, acmsession: string);
             static load(documentId: string, successCallback: (doc: Document) => void,
-            errorCallback: (errorCode: ErrorCodes, errorMsg: string, messages: any[]) => void, accessControlProperties: any): void;
+            errorCallback: (errorCode: ErrorCodes, errorMsg: string, messages: any[]) => void, accessControlProperties?: any): void;
             static getSubItemsWithProperties(item: object, properties: Properties, recursive: boolean): object[];
 
             acmSessionId: string;
 
             getFullPath(urn: string): string;
-            getItemById(id: string): Object;
-            getMessages(itemId: string, excludeGlobal: boolean): Object;
-            getNumViews(item: Object): number;
+            getItemById(id: string): object;
+            getMessages(itemId: string, excludeGlobal: boolean): object;
+            getNumViews(item: object): number;
             getParentId(item: string): string;
             getPath(): string;
             getPropertyDbPath(): string;
             getRoot(): BubbleNode;
-            getRootItem(): Object;
-            getSubItemsWithProperties(item: Object, properties: Object, recursive: boolean): Object;
-            getThumbnailOptions(item: Object, width: number, height: number): ThumbnailOptions;
+            getRootItem(): object;
+            getSubItemsWithProperties(item: object, properties: object, recursive: boolean): object;
+            getThumbnailOptions(item: object, width: number, height: number): ThumbnailOptions;
             getThumbnailPath(item: string, width: number, height: number): string;
             getViewableItems(document: Document): void;
-            getViewablePath(item: Object, outLoadOptions: Object): string;
-            getViewGeometry(item: Object): Object;
-            load(documentId: string, onSuccessCallback: Function, onErrorCallback: Function, accessControlProperties: Object): void;
+            getViewablePath(item: object, outLoadOptions?: object): string;
+            getViewGeometry(item: object): object;
+            load(documentId: string, onSuccessCallback: () => void, onErrorCallback: () => void, accessControlProperties?: object): void;
             requestThumbnailWithSecurity(data: string, onComplete: (err: Error, response: any) => void): void;
         }
 
@@ -427,13 +390,13 @@ declare namespace Autodesk {
           extensions: { [key: string]: Extension };
           extensionsAsync: { [key: string]: Extension };
 
-          registerExtension(extensionId: string, extension: Object): boolean;
+          registerExtension(extensionId: string, extension: object): boolean;
           getExtension(extensionId: string): Extension|null;
           unregisterExtension(extensionId: string): boolean;
           registerExternalExtension(extensionId: string, urlPath: string): boolean;
           getExternalPath(extensionId: string): string|null;
           unregisterExternalExtension(extensionId: string): boolean;
-          getRegisteredExtensions(): { id: string, inMemory: boolean, isAsync: boolean}[];
+          getRegisteredExtensions(): Array<{ id: string, inMemory: boolean, isAsync: boolean}>;
           popuplateOptions(options: any): void;
         }
 
@@ -578,7 +541,6 @@ declare namespace Autodesk {
         }
 
         class ScreenMode {
-          constructor();
         }
 
         abstract class ScreenModeDelegate {
@@ -604,6 +566,8 @@ declare namespace Autodesk {
         }
 
         class Viewer3D {
+            constructor(container: HTMLElement, config?: Viewer3DConfig);
+
             id: number;
             activateLayerState(stateName: string): void;
             activateExtension(extensionID: string, mode: string): boolean;
@@ -622,13 +586,13 @@ declare namespace Autodesk {
             finish(): void;
             fitToView(objectIds?: number[], model?: Model): boolean;
             getActiveNavigationTool(): string;
-            getAggregateSelection(callback?: Function): Object[];
+            getAggregateSelection(callback?: () => void): object[];
             getBimWalkToolPopup(): boolean;
             getCamera(): any;
             getClickConfig(what: string, where: string): string[] | null;
-            getCutPlanes(): Object[];
-            getDefaultNavigationToolName(): Object;
-            getDimensions(): Object;
+            getCutPlanes(): object[];
+            getDefaultNavigationToolName(): object;
+            getDimensions(): object;
             getExplodeScale(): number;
             getExtensionModes(extensionID: string): string[];
             getFirstPersonToolPopup(): boolean;
@@ -638,16 +602,15 @@ declare namespace Autodesk {
             getHiddenModels(): any[]; // Array<RenderModel>;
             getHiddenNodes(): any[];   // Array of nodes
             getHotkeyManager(): any;
-            getHiddenNodes(): number[];
             getIsolatedNodes(): number[];
             getLayerStates(): any[];
             getLoadedExtensions(): any[];
             getMemoryInfo(): any;
             getNavigationLock(): boolean;
-            getNavigationLockSettings(): Object;
-            getObjectTree(onSuccessCallback?: Function, onErrorCallback?: Function): void;
-            getProperties(dbid: number, onSuccessCallback?: Function, onErrorCallback?: Function): void;
-            getScreenShot(w?: number, h?: number, cb?: Function): any; // DOMString
+            getNavigationLockSettings(): object;
+            getObjectTree(onSuccessCallback?: () => void, onErrorCallback?: () => void): void;
+            getProperties(dbid: number, onSuccessCallback?: () => void, onErrorCallback?: () => void): void;
+            getScreenShot(w?: number, h?: number, cb?: () => void): any; // DOMString
             getSelection(): number[];
             getSelectionCount(): number;
             getSelectionVisibility(): { hasVisible: boolean, hasHidden: boolean };
@@ -663,20 +626,18 @@ declare namespace Autodesk {
             initSettings(): void;
             isExtensionActive(extensionID: string): boolean;
             isExtensionLoaded(extensionID: string): boolean;
-            isLayerVisible(node: Object): boolean;
+            isLayerVisible(node: object): boolean;
             isNodeVisible(nodeId: number, model?: Model): boolean;
-            isolate(node: number[]|number): void;
-            isolateById(dbids: number[]|number): void;
             joinLiveReview(sessionId: string): void;
             leaveLiveReview(): void;
             load(urn: string, sharedPropertyDbPath?: string, onSuccesfullCallback?: () => void,
                             onErrorCallback?: (errorCode: ErrorCodes, errorMessage: string, statusCode: number, statusText: string) => void): any;
             loadModel(urn: string, options?: any, onSuccesfullCallback?: () => void,
                             onErrorCallback?: (errorCode: ErrorCodes, errorMessage: string, statusCode: number, statusText: string) => void): any;
-            loadDocumentNode(lmvDocument: Document, bubbleNode: BubbleNode, options?: Object): void;
+            loadDocumentNode(lmvDocument: Document, bubbleNode: BubbleNode, options?: object): void;
             localize(): void;
             modelHasTopology(): boolean;
-            playAnimation(callback?: Function): void;
+            playAnimation(callback?: () => void): void;
             registerContextMenuCallback(id: string, callback: (menu: ContextMenuItem[], status: ContextMenuCallbackStatus) => void): void;
             resize(): void;
             restoreState(state: any, filter?: any, immediate?: boolean): boolean;
@@ -685,7 +646,7 @@ declare namespace Autodesk {
             setActiveNavigationTool(toolName?: string): boolean;
             setBackgroundColor(red: number, green: number, blue: number, red2: number, green2: number, blue2: number): void;
             setBimWalkToolPopup(value: boolean): void;
-            setCanvasClickBehavior(config: Object): void;
+            setCanvasClickBehavior(config: object): void;
             setClickConfig(what: string, where: string, newAction: string|string[]): boolean;
             setClickToSetCOI(state: boolean, updatePrefs?: boolean): void;
             setContextMenu(contextMenu: any): void; // ObjectContextMenu)
@@ -735,12 +696,12 @@ declare namespace Autodesk {
             showAll(): void;
             showModel(modelId: number): boolean;
             start(url?: string, options?: LoadModelOptions,
-                  onSuccessCallback?: Function,
-                  onErrorCallback?: Function): number|ErrorCodes;
+                  onSuccessCallback?: () => void,
+                  onErrorCallback?: () => void): number|ErrorCodes;
             tearDown(): void;
             toggleSelect(dbid: number, selectionType: SelectionMode): void;
             toggleVisibility(node: number): void;
-            toolbar: Autodesk.Viewing.UI.ToolBar;
+            toolbar: UI.ToolBar;
             trackADPSettingsOptions(): void;
             transferModel(): void;
             uninitialize(): void;
@@ -759,33 +720,32 @@ declare namespace Autodesk {
           myCurrentViewer: Viewer3D;
           urn: string;
           selectedItem: ViewerItem|null;
-          extensionCache: Object;
-
+          extensionCache: object;
 
           constructor(containerId: string, options?: ViewingApplicationOptions);
 
           addItemSelectedObserver(observer: ItemSelectedObserver): void;
           finish(): void;
           getCurrentViewer(): Viewer3D;
-          getDefaultGeometry(geometryItems: any[]): Object;
-          getNamedViews(item: Object): any[];
-          getSelectedItem(): Object|null;
+          getDefaultGeometry(geometryItems: any[]): object;
+          getNamedViews(item: object): any[];
+          getSelectedItem(): object|null;
           getViewer(config: Viewer3DConfig): Viewer3D;
           getViewerContainer(): HTMLElement;
           loadDocument(documentId: any,
                        onDocumentLoad?: (document: Document) => void,
                        onLoadFailed?: (errorCode: string, errorMsg: string, errors: any[]) => void,
-                       accessControlProperties?: Object): void;
+                       accessControlProperties?: object): void;
           registerViewer(viewableType: string, viewerClass: any, config?: ViewerConfig): void;
           selectItem(item: ViewerItem|BubbleNode,
                      onSuccessCallback: (viewer: Viewer3D, item: ViewerItem) => void,
                      onErrorCallback: (errorCode: ErrorCodes, errorMsg: string,
                                        statusCode: string, statusText: string, messages: string) => void): boolean;
           selectItemById(itemId: number,
-                         onItemSelectedCallback: (item: Object, viewGeometryItem: Object) => void,
-                         onItemFailedToSelectCallback: Function): boolean;
+                         onItemSelectedCallback: (item: object, viewGeometryItem: object) => void,
+                         onItemFailedToSelectCallback: () => void): boolean;
           setCurrentViewer(viewer: Viewer3D): void;
-          setDocument(docManifest: Object): boolean;
+          setDocument(docManifest: object): boolean;
         }
 
         class ViewingUtilities {
@@ -807,15 +767,14 @@ declare namespace Autodesk {
               prefix?: string;
             }
 
-
             class Preferences {
               constructor(viewer: Viewer3D, options: PreferencesOptions);
 
               add(name: string, defaultValue: any, tags?: string[]|string): boolean;
-              addListeners(name: string, onChangedCallback: Function, onResetCallback: Function): void;
+              addListeners(name: string, onChangedCallback: () => void, onResetCallback: () => void): void;
               get(): any;
               hasTag(name: string, tag: string): boolean;
-              load(defaultValues: Object): void;
+              load(defaultValues: object): void;
               remove(name: string, removeFromWebStorage?: boolean): boolean;
               removeListeners(name: string): void;
               reset(tag?: string, include?: boolean): void;
@@ -827,14 +786,13 @@ declare namespace Autodesk {
             class ViewerState {
               constructor(viewer: Viewer3D);
 
-              areEqual(viewerStateA: Object, viewerStateB: Object, filter?: Object): boolean;
+              areEqual(viewerStateA: object, viewerStateB: object, filter?: object): boolean;
               getSeedUrn(): string;
-              getState(filter?: Object): Object;
-              restoreState(viewerState: Object, filter?: Object, immediate?: boolean): boolean;
+              getState(filter?: object): object;
+              restoreState(viewerState: object, filter?: object, immediate?: boolean): boolean;
             }
 
             class GuiViewer3D extends Viewer3D {
-
               canvas: HTMLCanvasElement;
 
               toolController: ToolController;
@@ -946,7 +904,7 @@ declare namespace Autodesk {
           }
 
           interface AddControlOptions {
-            index?: Object;
+            index?: object;
             [key: string]: any;
           }
 
@@ -957,7 +915,7 @@ declare namespace Autodesk {
 
           interface MenuItem {
             title: string;
-            target: Function | MenuItem[];
+            target: () => void | MenuItem[];
           }
 
           const COLLAPSED_CHANGED = 'Control.VisibilityChanged';
@@ -975,8 +933,8 @@ declare namespace Autodesk {
             title: HTMLElement;
             titleLabel: string;
 
-            addEventListener(target: Object, eventId: string, callback: Function): void;
-            addVisibilityListener(callback: Function): void;
+            addEventListener(target: object, eventId: string, callback: () => void): void;
+            addVisibilityListener(callback: () => void): void;
             createCloseButton(): HTMLElement;
             createScrollContainer(options: ScrollContainerOptions): void;
             createTitleBar(title: string): HTMLElement;
@@ -991,7 +949,7 @@ declare namespace Autodesk {
             onStartMove(event: MouseEvent, startX: number, startY: number): void;
             onTitleClick(event: Event): void;
             onTitleDoubleClick(event: Event): void;
-            removeEventListener(target: Object, eventId: string, callback: Function): boolean;
+            removeEventListener(target: object, eventId: string, callback: () => void): boolean;
             resizeToContent(options: ResizeOptions): void;
             setTitle(text: string, options: DockingPanelOptions): void;
             setVisible(show: boolean): void;
@@ -1001,58 +959,58 @@ declare namespace Autodesk {
 
           class LayersPanel extends DockingPanel {
             build(): void;
-            createNode(node: Object, parent: HTMLElement): void;
-            getNodeClass(node: Object): string;
-            getNodeLabel(node: Object): string;
-            isGroupCollapsed(node: Object): boolean;
-            isGroupNode(node: Object): boolean;
-            onClick(node: Object, event: Event): void;
-            onDoubleClick(node: Object, event: Event): void;
-            onIconClick(node: Object, event: Event): void;
-            onImageClick(node: Object, event: Event): void;
-            onRightClick(node: Object, event: Event): void;
-            setGroupCollapsed(node: Object, collapse: boolean): void;
-            setLayerVisible(node: Object, collapse: boolean): void;
-            shouldInclude(node: Object): boolean;
+            createNode(node: object, parent: HTMLElement): void;
+            getNodeClass(node: object): string;
+            getNodeLabel(node: object): string;
+            isGroupCollapsed(node: object): boolean;
+            isGroupNode(node: object): boolean;
+            onClick(node: object, event: Event): void;
+            onDoubleClick(node: object, event: Event): void;
+            onIconClick(node: object, event: Event): void;
+            onImageClick(node: object, event: Event): void;
+            onRightClick(node: object, event: Event): void;
+            setGroupCollapsed(node: object, collapse: boolean): void;
+            setLayerVisible(node: object, collapse: boolean): void;
+            shouldInclude(node: object): boolean;
             update(): void;
           }
 
           class PropertyPanel extends DockingPanel {
             addProperty(name: string, value: string, category: string, options?: AddPropertyOptions): boolean;
             areDefaultPropertiesShown(): void;
-            displayCategory(category: Object, parent: HTMLElement, options: DisplayCategoryOptions): HTMLElement[];
-            displayProperty(property: Object, parent: HTMLElement, options: DisplayCategoryOptions): HTMLElement[];
-            getCategoryClass(category: Object): string;
-            getPropertyClass(property: Object): string;
+            displayCategory(category: object, parent: HTMLElement, options: DisplayCategoryOptions): HTMLElement[];
+            displayProperty(property: object, parent: HTMLElement, options: DisplayCategoryOptions): HTMLElement[];
+            getCategoryClass(category: object): string;
+            getPropertyClass(property: object): string;
             hasProperties(): boolean;
-            highlight(text: string, options: Object): void;
-            isCategoryCollapsed(category: Object): boolean;
-            onCategoryClick(category: Object, event: Event): void;
-            onCategoryDoubleClick(category: Object, event: Event): void;
-            onCategoryIconClick(category: Object, event: Event): void;
-            onCategoryRightClick(category: Object, event: Event): void;
-            onPropertyClick(property: Object, event: Event): void;
-            onPropertyDoubleClick(property: Object, event: Event): void;
-            onPropertyIconClick(property: Object, event: Event): void;
-            onPropertyRightClick(property: Object, event: Event): void;
+            highlight(text: string, options: object): void;
+            isCategoryCollapsed(category: object): boolean;
+            onCategoryClick(category: object, event: Event): void;
+            onCategoryDoubleClick(category: object, event: Event): void;
+            onCategoryIconClick(category: object, event: Event): void;
+            onCategoryRightClick(category: object, event: Event): void;
+            onPropertyClick(property: object, event: Event): void;
+            onPropertyDoubleClick(property: object, event: Event): void;
+            onPropertyIconClick(property: object, event: Event): void;
+            onPropertyRightClick(property: object, event: Event): void;
             removeAllProperties(): void;
-            removeProperty(name: string, value: string, category: string, options?: Object): boolean;
-            setCategoryCollapsed(category: Object, collapsed: boolean): void;
-            setProperties(properties: {displayName: string, displayValue: any}[], options?: Object): void;
+            removeProperty(name: string, value: string, category: string, options?: object): boolean;
+            setCategoryCollapsed(category: object, collapsed: boolean): void;
+            setProperties(properties: Array<{displayName: string, displayValue: any}>, options?: object): void;
             showDefaultProperties(): void;
             showNoProperties(): void;
           }
 
           class SettingsPanel extends DockingPanel {
             addCheckbox(tabId: string, caption: string, initialState: boolean,
-                        onchange: Function, options?: Object): string;
-            addControl(tabId: string, control: Object|HTMLElement, options: Object|undefined): string;
+                        onchange: () => void, options?: object): string;
+            addControl(tabId: string, control: object|HTMLElement, options: object|undefined): string;
             addDropDownMenu(tabId: string, caption: string, items: MenuItem[],
-                            initialItemIndex: number, onchange: Function, options: Object|undefined): string;
+                            initialItemIndex: number, onchange: () => void, options: object|undefined): string;
             addSlider(tabId: string, caption: string, min: number, max: number, initialValue: number,
-                      onchange: Function, options: Object|undefined): string;
-            addTab(tabId: string, tabTitle: string, options: Object|undefined): boolean;
-            getControl(controlId: string): Object;
+                      onchange: () => void, options: object|undefined): string;
+            addTab(tabId: string, tabTitle: string, options: object|undefined): boolean;
+            getControl(controlId: string): object;
             hasTab(tabId: string): boolean;
             isTabSelected(tabId: string): boolean;
             removeCheckbox(checkboxId: string|Control): boolean;
@@ -1066,18 +1024,18 @@ declare namespace Autodesk {
 
           class ModelStructurePanel extends DockingPanel {
             addClass(id: string, className: string): boolean;
-            getNodeClass(node: Object): string;
-            getNodeLabel(node: Object): string;
-            isGroupCollapsed(node: Object): boolean;
-            isGroupNode(node: Object): boolean;
-            onClick(node: Object, event: Event): void;
-            onDoubleClick(node: Object, event: Event): void;
-            onHover(node: Object, event: Event): void;
-            onIconClick(node: Object, event: Event): void;
-            onRightClick(node: Object, event: Event): void;
+            getNodeClass(node: object): string;
+            getNodeLabel(node: object): string;
+            isGroupCollapsed(node: object): boolean;
+            isGroupNode(node: object): boolean;
+            onClick(node: object, event: Event): void;
+            onDoubleClick(node: object, event: Event): void;
+            onHover(node: object, event: Event): void;
+            onIconClick(node: object, event: Event): void;
+            onRightClick(node: object, event: Event): void;
             removeClass(id: string, className: string): boolean;
-            setGroupCollapsed(node: Object, collapsed: boolean): void;
-            setModel(instanceTree: Object, modelTitle: string): void; // InstanceTree?
+            setGroupCollapsed(node: object, collapsed: boolean): void;
+            setModel(instanceTree: object, modelTitle: string): void; // InstanceTree?
             setSelection(nodes: Model[]): void;
             shouldInclude(node: Model): boolean;
           }
@@ -1085,7 +1043,7 @@ declare namespace Autodesk {
           class ObjectContextMenu {
             constructor(viewer: Viewer3D);
 
-            buildMenu(event: Event, status: Object): MenuItem[];
+            buildMenu(event: Event, status: object): MenuItem[];
             hide(): boolean;
             show(event: Event): void;
           }
@@ -1098,14 +1056,14 @@ declare namespace Autodesk {
             CLICK: 'click';
           }
 
-          class Control implements EventTarget {
+          class Control {
             constructor(id?: string, options?: ControlOptions);
 
             Event: ControlEventArgs;
             addClass(cssClass: string): void;
-            getDimensions(): Object;
+            getDimensions(): object;
             getId(): string;
-            getPosition(): Object;
+            getPosition(): object;
             getToolTip(): string;
             isCollapsed(): boolean;
             isCollapsible(): boolean;
@@ -1138,15 +1096,15 @@ declare namespace Autodesk {
           }
 
           class ToolBar extends ControlGroup {
-            constructor(id: string, options?: Object);
+            constructor(id: string, options?: object);
           }
 
           class RadioButtonGroup extends ControlGroup {
-            constructor(id: string, options?: Object);
+            constructor(id: string, options?: object);
 
             Event: ControlEventArgs;
 
-            addControl(control: Control, options: Object): boolean;
+            addControl(control: Control, options: object): boolean;
             getActiveButton(): Button;
             removeControl(control: string | Control): boolean;
           }
@@ -1158,7 +1116,7 @@ declare namespace Autodesk {
           }
 
           class Button extends Control {
-            constructor(id: string, options?: Object);
+            constructor(id: string, options?: object);
 
             State: ControlStates;
             Event: ControlEventArgs;
@@ -1172,13 +1130,12 @@ declare namespace Autodesk {
           }
 
           class ComboButton extends Button {
-            constructor(id: string, options?: Object);
+            constructor(id: string, options?: object);
 
             addControl(): void;
             restoreDefault(): void;
             saveAsDefault(): void;
           }
-
         }
     }
 }
